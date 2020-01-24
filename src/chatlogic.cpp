@@ -159,7 +159,7 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
 
                             // store reference in child node and parent node
                             (childNode->get())->AddEdgeToParentNode(edge.get());
-                            (parentNode->get())->AddEdgeToChildNode(edge.get());
+                            (parentNode->get())->AddEdgeToChildNode(std::move(edge)); // To move it to the new child node using move semantics.
                         }
 
                         ////
