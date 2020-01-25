@@ -104,9 +104,10 @@ ChatBot& ChatBot::operator=(ChatBot &&source)
     if (this == &source)
         return *this;
 
-    _currentNode = source._currentNode;
     _rootNode = source._rootNode;
     _chatLogic = source._chatLogic;
+    _currentNode = source._currentNode;
+    _chatLogic->SetChatbotHandle(this);
 
     source._currentNode = nullptr;
     source._rootNode = nullptr;

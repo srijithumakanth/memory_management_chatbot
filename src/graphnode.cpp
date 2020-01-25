@@ -34,16 +34,19 @@ void GraphNode::AddEdgeToChildNode(std::unique_ptr<GraphEdge> edge)
 
 //// STUDENT CODE
 ////
-void GraphNode::MoveChatbotHere(ChatBot *chatbot)
+void GraphNode::MoveChatbotHere(ChatBot chatbot)
 {
-    _chatBot = chatbot;
+    _chatBot.reset(new ChatBot()); // Needed to reset otherwise it segfaults at move assignment operator
+    *_chatBot = std::move(chatbot); // This should invoke the move constructor
     _chatBot->SetCurrentNode(this);
 }
 
 void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 {
-    newNode->MoveChatbotHere(_chatBot);
-    _chatBot = nullptr; // invalidate pointer at source
+    newNode->MoveChatbotHere(std::move(*_chatBot)); // Added std::move to convert lvalue to rvalue
+                                                    // otherwise it was invoking copy constructor when sending a query.
+    _chatBot.reset();
+    // _chatBot = nullptr; // invalidate pointer at source
 }
 ////
 //// EOF STUDENT CODE
